@@ -45,6 +45,8 @@ var Game = {
   HEIGHT: 480,
 
   DIST: 30,
+  STEP: 3,
+
   level: 1,
 
   players: [],
@@ -58,6 +60,15 @@ var Game = {
   },
   getMazeHeight: function () {
     return this.ROWS * this.DIST;
+  },
+
+  dir2Rads: function(dir) {
+    return dir / 360 * 2 * Math.PI;
+  },
+
+  dir2Array: function(dir) {
+    var rads = Game.dir2Rads(dir);
+    return [Math.cos(rads), Math.sin(rads)];
   },
 
   ctx: null,
@@ -104,6 +115,7 @@ var Game = {
     document.onkeydown = function(event) {
       Game.keyDown(event.keyCode);
       Game.players[0].draw();
+      Game.players[0].move();
     };
 
 
@@ -122,6 +134,8 @@ Game.Console = {
 Game.Player = function() {
   this.x = 20;
   this.y = 20;
+  this.lastX = 20;
+  this.lastY = 20;
   this.dir = Game.DIR_RIGHT;
 }
 
@@ -134,12 +148,19 @@ Game.Player.prototype.turn = function(dir) {
   this.dir = dir;
 }
 
+Game.Player.prototype.move = function() {
+  var dirArray = Game.dir2Array(this.dir);
+  [this.lastX, this.lastY] = [this.x, this.y];
+  this.x += Game.STEP * dirArray[0];
+  this.y += Game.STEP * dirArray[1];
+}
+
 Game.Player.prototype.draw = function() {
   var baseDir = this.dir / 360 * 2 * Math.PI;
   Game.ctx.lineWidth = 2;
   Game.ctx.fillStyle = "black";
   Game.ctx.beginPath();
-  Game.ctx.arc(this.x, this.y, Game.DIST / 2 + 2, 0, Math.PI * 2);
+  Game.ctx.arc(this.lastX, this.lastY, Game.DIST / 2 + 2, 0, Math.PI * 2);
   Game.ctx.closePath();
   Game.ctx.fill();
 
