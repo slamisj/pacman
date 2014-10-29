@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Pacman</title>
+    <script src="rot.js"></script>
+    <script src="game.js"></script>
+    <style type="text/css">
+      canvas {
+        display: block;
+        margin: 100px auto 5px;
+      }
+      body {
+        background: black;
+      }
+      #console {
+        color: white;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body onload="Game.run()">
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <p id="console"></p>
+  </body>
+</html>
